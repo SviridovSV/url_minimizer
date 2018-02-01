@@ -3,6 +3,9 @@ class Url < ApplicationRecord
 
   validates :long_url, presence: true
   validates :short_url, uniqueness: true, if: :custom_short_url?
+  validates :short_url, uniqueness: true, on: :update
+  validates :life_term, :delay_time, numericality: { only_integer: true }
+
   after_create :ensure_short_url_has_a_value
 
   private
