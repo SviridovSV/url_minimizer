@@ -1,5 +1,10 @@
 class UrlsController < ApplicationController
-  before_action :set_url, only: [:show]
+  before_action :decode_url, only: [:index]
+  before_action :set_url, only: [:show, :index]
+
+  def index
+    redirect_to @url.long_url
+  end
 
   def new
     @url = Url.new
@@ -19,6 +24,11 @@ class UrlsController < ApplicationController
   end
 
   private
+  def decode_url
+    hashids = Hashids.new("this is my application")
+    params[:id] = hashids.decode(params[:short_url].to_s).first
+  end
+
   def set_url
     @url = Url.find(params[:id])
   end
