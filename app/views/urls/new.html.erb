@@ -1,2 +1,41 @@
-<h1>Urls#new</h1>
-<p>Find me in app/views/urls/new.html.erb</p>
+<h1> Please, fill this form  </h1>
+<%= form_with(model: @url, local: true) do |form| %>
+  <% if @url.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@url.errors.count, "error") %> prohibited this url from being saved:</h2>
+
+      <ul>
+      <% @url.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :long_url %>
+    <%= form.text_field :long_url, id: :url_long_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :short_url %>
+    <%= form.text_field :short_url, id: :url_short_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :life_term %>
+    <%= form.text_field :life_term, id: :url_life_term %>
+  </div>
+
+  <div class="field">
+    <%= form.label :delay_time %>
+    <%= form.text_field :delay_time, id: :url_delay_time %>
+  </div>
+
+  <%= form.hidden_field :user_id, value: current_user.id %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+

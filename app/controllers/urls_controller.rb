@@ -6,7 +6,7 @@ class UrlsController < ApplicationController
   end
 
   def create
-    @user = Url.new(url_params)
+    @url = Url.new(url_params)
     if @url.save
       redirect_to url_path(@url), notice: 'Your short link was created succesfully'
     else

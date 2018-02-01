@@ -18,6 +18,7 @@ gem 'jquery-rails'
 gem 'bootstrap-sass'
 gem 'figaro'
 gem 'sorcery'
+gem 'hashids'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password

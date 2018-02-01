@@ -1,17 +1,7 @@
 Rails.application.routes.draw do
-  get 'urls/new'
-
-  get 'urls/create'
-
-  get 'urls/show'
-
-  # get 'user_sessions/new'
-
-  # get 'user_sessions/create'
-
-  # get 'user_sessions/destroy'
   resources :user_sessions
   resources :users
+  resources :urls
 
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
