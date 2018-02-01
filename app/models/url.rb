@@ -18,7 +18,7 @@ class Url < ApplicationRecord
   end
 
   def generate_code
-    hashids = Hashids.new("this is my application")
+    hashids = Hashids.new(ENV['HASHIDS_PHRASE'])
     hash = hashids.encode(self.id, self.life_term.to_i, self.delay_time.to_i, self.user_id)
   end
 end

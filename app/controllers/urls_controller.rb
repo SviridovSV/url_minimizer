@@ -25,7 +25,7 @@ class UrlsController < ApplicationController
 
   private
   def decode_url
-    hashids = Hashids.new("this is my application")
+    hashids = Hashids.new(ENV['HASHIDS_PHRASE'])
     params[:id] = hashids.decode(params[:short_url].to_s).first
   end
 
