@@ -1,9 +1,9 @@
 class UrlsController < ApplicationController
-  before_action :decode_url, only: [:index]
-  before_action :set_url, only: [:show, :index]
+  before_action :fetch_long_url, only: [:index]
+  before_action :set_url, only: [:show]
 
   def index
-    redirect_to @url.long_url
+    redirect_to @url
   end
 
   def new
@@ -24,9 +24,9 @@ class UrlsController < ApplicationController
   end
 
   private
-  def decode_url
-    hashids = Hashids.new(ENV['HASHIDS_PHRASE'])
-    params[:id] = hashids.decode(params[:short_url].to_s).first
+
+  def fetch_long_url
+    @url = $redis.get("#{params[:short_url]}")
   end
 
   def set_url

@@ -19,6 +19,10 @@ gem 'bootstrap-sass'
 gem 'figaro'
 gem 'sorcery'
 gem 'hashids'
+gem 'redis'
+gem 'redis-namespace'
+gem 'redis-rails'
+gem 'redis-rack-cache'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password

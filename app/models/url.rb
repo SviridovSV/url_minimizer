@@ -7,6 +7,11 @@ class Url < ApplicationRecord
   validates :life_term, :delay_time, numericality: { only_integer: true }
 
   after_create :ensure_short_url_has_a_value
+  after_save :send_data_to_redis
+
+  def send_data_to_redis
+    $redis.set("#{self.short_url}", "#{self.long_url}")
+  end
 
   private
   def custom_short_url?
