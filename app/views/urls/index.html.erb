@@ -1,0 +1,4 @@
+<% @urls.each do |url| %>
+  <div><%= url.long_url %> | <%= full_url(url) %> <%= button_to "STATISTIC", url_statistics_path(url), {method: 'get'} %></div>
+  <br>
+<% end %>

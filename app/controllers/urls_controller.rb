@@ -2,6 +2,27 @@ class UrlsController < ApplicationController
   before_action :set_url, only: [:show]
 
   def index
+    @urls = current_user.urls
+  end
+
+  def new
+    @url = Url.new
+  end
+
+  def create
+    @url = Url.new(url_params)
+    if @url.save
+      redirect_to url_path(@url), notice: 'Your short link was created succesfully'
+    else
+      flash.now[:alert] = 'Creation of short link is failed'
+      render :new
+    end
+  end
+
+  def show
+  end
+
+  def fullpath
     code_str = JSON.parse($redis.get("#{params[:short_url]}"), symbolize_names: true)
     if code_str.blank?
       url = Url.find_by(short_url: params[:short_url])
@@ -35,28 +56,7 @@ class UrlsController < ApplicationController
     redirect_to code_str[:long_url]
   end
 
-  def new
-    @url = Url.new
-  end
-
-  def create
-    @url = Url.new(url_params)
-    if @url.save
-      redirect_to url_path(@url), notice: 'Your short link was created succesfully'
-    else
-      flash.now[:alert] = 'Creation of short link is failed'
-      render :new
-    end
-  end
-
-  def show
-  end
-
   private
-
-  # def fetch_long_url
-  #   @url = $redis.get("#{params[:short_url]}")
-  # end
 
   def set_url
     @url = Url.find(params[:id])

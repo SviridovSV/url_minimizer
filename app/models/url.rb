@@ -1,5 +1,6 @@
 class Url < ApplicationRecord
   belongs_to :user
+  has_many :statistics
 
   validates :long_url, presence: true
   validates :short_url, uniqueness: true, if: :custom_short_url?
@@ -17,6 +18,14 @@ class Url < ApplicationRecord
     unless custom_short_url?
       self.short_url = generate_code
       self.save
+    end
+  end
+
+  def fetch_stat_from_redis
+    stat_array = JSON.parse($redis.get("#{self.short_url}"), symbolize_names: true)
+    stat_array[:stat].each do |elem|
+      s = Statistic.new(url_id: self.id, date: elem.first.to_datetime)
+      s.save
     end
   end
 
