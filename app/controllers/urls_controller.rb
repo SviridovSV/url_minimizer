@@ -1,9 +1,27 @@
 class UrlsController < ApplicationController
-  before_action :fetch_long_url, only: [:index]
+  # before_action :fetch_long_url, only: [:index]
   before_action :set_url, only: [:show]
 
   def index
-    redirect_to @url
+    code_str = JSON.parse($redis.get("#{params[:short_url]}"), symbolize_names: true)
+    if code_str.blank?
+      url = Url.find_by(short_url: params[:short_url])
+      if url
+        code_str = {
+          long_url: url.long_url,
+          created_at: url.created_at,
+          life_term: url.life_term,
+          delay_time: url.delay_time,
+          stat: [[Time.now, request.user_agent]]
+        }
+        $redis.set(url.short_url, code_str.to_json)
+      else
+        redirect_to new_url_path, notice: 'Can not find this link. Create it.'
+      end
+    end
+    code_str[:stat] << [Time.now, request.user_agent]
+    $redis.set("#{params[:short_url]}", code_str.to_json)
+    redirect_to code_str[:long_url]
   end
 
   def new
@@ -25,9 +43,9 @@ class UrlsController < ApplicationController
 
   private
 
-  def fetch_long_url
-    @url = $redis.get("#{params[:short_url]}")
-  end
+  # def fetch_long_url
+  #   @url = $redis.get("#{params[:short_url]}")
+  # end
 
   def set_url
     @url = Url.find(params[:id])

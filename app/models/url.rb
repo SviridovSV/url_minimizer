@@ -4,18 +4,13 @@ class Url < ApplicationRecord
   validates :long_url, presence: true
   validates :short_url, uniqueness: true, if: :custom_short_url?
   validates :short_url, uniqueness: true, on: :update
-  validates :life_term, :delay_time, numericality: { only_integer: true }
+  validates :life_term, :delay_time, numericality: { only_integer: true }, :allow_blank => true
 
   after_create :ensure_short_url_has_a_value
   after_save :send_data_to_redis
 
   def send_data_to_redis
-    $redis.set("#{self.short_url}", "#{self.long_url}")
-  end
-
-  private
-  def custom_short_url?
-    !self.short_url.empty?
+    $redis.set("#{self.short_url}", hash_for_redis.to_json)
   end
 
   def ensure_short_url_has_a_value
@@ -23,6 +18,21 @@ class Url < ApplicationRecord
       self.short_url = generate_code
       self.save
     end
+  end
+
+  private
+  def hash_for_redis
+    {
+      long_url: self.long_url,
+      created_at: self.created_at,
+      life_term: self.life_term,
+      delay_time: self.delay_time,
+      stat: []
+    }
+  end
+
+  def custom_short_url?
+    !self.short_url.empty?
   end
 
   def generate_code
