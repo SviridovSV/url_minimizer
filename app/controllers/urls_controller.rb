@@ -1,5 +1,4 @@
 class UrlsController < ApplicationController
-  # before_action :fetch_long_url, only: [:index]
   before_action :set_url, only: [:show]
 
   def index
@@ -12,11 +11,23 @@ class UrlsController < ApplicationController
           created_at: url.created_at,
           life_term: url.life_term,
           delay_time: url.delay_time,
-          stat: [[Time.now, request.user_agent]]
+          stat: []
         }
         $redis.set(url.short_url, code_str.to_json)
       else
         redirect_to new_url_path, notice: 'Can not find this link. Create it.'
+      end
+    end
+    unless code_str[:life_term].blank?
+      if code_str[:created_at].to_time+code_str[:life_term].to_i < Time.now
+        redirect_to new_url_path, notice: 'This link is not active already.'
+        return
+      end
+    end
+    unless code_str[:delay_time].blank?
+      if code_str[:created_at].to_time+code_str[:delay_time].to_i > Time.now
+        redirect_to new_url_path, notice: 'This link is not active yet.'
+        return
       end
     end
     code_str[:stat] << [Time.now, request.user_agent]
