@@ -1,24 +1,3 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+<p> Минификатор URL. Пользователь регистрируется. Пользователю предоставляется поле для ввода URL, по нажатию кнопки “Уменьшить” пользователю предоставляется короткая ссылка с текущим доменом сайта. При переходе по уменьшенной ссылке пользователь будет перенаправлен на исходную страницу. Пользователь должен иметь возможность создать свою короткую ссылку. Пользователь должен иметь возможность создавать ссылки с ограниченным сроком жизни. Пользователь должен иметь возможность создавать ссылки, которые станут доступны через n секунд, но не ранее. Пользователь, создающий ссылку, также получает ссылку на статистику переходов (кол-во по дате, устройства, браузеры)</p>
