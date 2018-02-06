@@ -12,30 +12,31 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :long_url %>
-    <%= form.text_field :long_url, id: :url_long_url %>
+  <div class="form-group">
+    <%= form.label :long_url, for: "inputLongUrl" %>
+    <small id="longUrlHelp" class="form-text text-muted">Required</small>
+    <%= form.text_field :long_url, id: :inputLongUrl, placeholder: "Enter full URL", class: "form-control" %>
   </div>
 
-  <div class="field">
-    <%= form.label :short_url %>
-    <%= form.text_field :short_url, id: :url_short_url %>
+  <div class="form-group">
+    <%= form.label :short_url, for: "inputShortUrl" %>
+    <small id="shortUrlHelp" class="form-text text-muted">Optional</small>
+    <%= form.text_field :short_url, id: :inputShortUrl, placeholder: "Enter short link", class: "form-control" %>
   </div>
 
-  <div class="field">
-    <%= form.label :life_term %>
-    <%= form.text_field :life_term, id: :url_life_term %>
+  <div class="form-group">
+    <%= form.label :life_term, for: "inputLifeTerm" %>
+    <small id="shortUrlHelp" class="form-text text-muted">Optional</small>
+    <%= form.text_field :life_term, id: :inputLifeTerm, placeholder: "Enter life term for short link (in seconds)", class: "form-control" %>
   </div>
 
-  <div class="field">
-    <%= form.label :delay_time %>
-    <%= form.text_field :delay_time, id: :url_delay_time %>
+  <div class="form-group">
+    <%= form.label :delay_time, for: "inputDelayTime" %>
+    <%= form.text_field :delay_time, id: :inputDelayTime, placeholder: "Enter delay time for short link (in seconds)", class: "form-control" %>
   </div>
 
   <%= form.hidden_field :user_id, value: current_user.id %>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+  <%= form.submit "Convert", class: "btn btn-primary" %>
 <% end %>
 

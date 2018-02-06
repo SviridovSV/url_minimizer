@@ -1,4 +1,18 @@
-<% @urls.each do |url| %>
-  <div><%= url.long_url %> | <%= full_url(url) %> <%= button_to "STATISTIC", url_statistics_path(url), {method: 'get'} %></div>
-  <br>
-<% end %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Full path</th>
+      <th scope="col">Short url</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @urls.each do |url| %>
+      <tr>
+        <td><%= url.long_url %></td>
+        <td><%= full_url(url) %></td>
+        <td><%= button_to "STATISTIC", url_statistics_path(url), {method: 'get'} %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

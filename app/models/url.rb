@@ -22,11 +22,20 @@ class Url < ApplicationRecord
   end
 
   def fetch_stat_from_redis
+    statistics_insert_vals = []
     stat_array = JSON.parse($redis.get("#{self.short_url}"), symbolize_names: true)
     stat_array[:stat].each do |elem|
-      s = Statistic.new(url_id: self.id, date: elem.first.to_datetime)
-      s.save
+      client = DeviceDetector.new(elem.last)
+      statistics_insert_vals << "('#{elem.first.to_datetime.to_s(:db)}','#{client.device_type}','#{client.os_name}',#{self.id},NOW(),NOW())"
     end
+    sql = ActiveRecord::Base.connection()
+    statistics_insert_sql = "INSERT INTO statistics (date,gadget,browser,url_id,created_at,updated_at) VALUES "
+    statistics_insert_vals.in_groups_of(4, false).each do |group|
+      sql.transaction do
+        sql.execute statistics_insert_sql + group.join(",") + ";"
+      end
+    end
+    send_data_to_redis
   end
 
   private

@@ -15,7 +15,7 @@ gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
-gem 'bootstrap-sass'
+gem 'bootstrap'
 gem 'figaro'
 gem 'sorcery'
 gem 'hashids'
@@ -23,13 +23,7 @@ gem 'redis'
 gem 'redis-namespace'
 gem 'redis-rails'
 gem 'redis-rack-cache'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+gem 'device_detector'
 
 group :development, :test do
   gem 'factory_bot_rails'
