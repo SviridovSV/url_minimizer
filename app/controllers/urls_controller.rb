@@ -48,7 +48,7 @@ class UrlsController < ApplicationController
     end
     unless code_str[:delay_time].blank?
       if code_str[:created_at].to_time+code_str[:delay_time].to_i > Time.now
-        redirect_to new_url_path, notice: 'This link is not active yet.'
+        redirect_back fallback_location: root_path, notice: 'This link is not active yet.'
         return
       end
     end
