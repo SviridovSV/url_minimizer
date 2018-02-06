@@ -1,18 +1,26 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Full path</th>
-      <th scope="col">Short url</th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @urls.each do |url| %>
+<% if @urls %>
+  <table class="table table-striped">
+    <thead>
       <tr>
-        <td><%= url.long_url %></td>
-        <td><%= full_url(url) %></td>
-        <td><%= button_to "STATISTIC", url_statistics_path(url), {method: 'get'} %></td>
+        <th scope="col">Full path</th>
+        <th scope="col">Short url</th>
+        <th scope="col"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @urls.each do |url| %>
+        <tr>
+          <td><%= url.long_url %></td>
+          <td><%= full_url(url) %></td>
+          <td><%= button_to "STATISTIC", url_statistics_path(url), {method: 'get'} %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">You have no available links. Just <%= link_to "create", new_url_path %> it</h1>
+    </div>
+  </div>
+<% end %>

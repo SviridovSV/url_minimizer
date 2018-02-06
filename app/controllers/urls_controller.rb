@@ -1,8 +1,9 @@
 class UrlsController < ApplicationController
+  skip_before_action :require_login, only: [:index]
   before_action :set_url, only: [:show]
 
   def index
-    @urls = current_user.urls
+    @urls = current_user ? current_user.urls : nil
   end
 
   def new
