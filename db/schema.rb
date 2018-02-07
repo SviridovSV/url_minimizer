@@ -16,12 +16,10 @@ ActiveRecord::Schema.define(version: 20180205221025) do
   enable_extension "plpgsql"
 
   create_table "statistics", force: :cascade do |t|
-    t.datetime "date"
+    t.datetime "stat_date"
     t.text "gadget"
     t.text "browser"
     t.bigint "url_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["url_id"], name: "index_statistics_on_url_id"
   end
 
