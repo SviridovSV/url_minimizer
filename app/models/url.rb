@@ -8,20 +8,15 @@ class Url < ApplicationRecord
   validates :life_term, :delay_time, numericality: { only_integer: true }, allow_blank: true
 
   after_create :ensure_short_url_has_a_value
-  # after_save :send_data_to_redis
-
-  # def send_data_to_redis
-  #   $redis.lpush("#{self.short_url}", hash_for_redis.to_json)
-  # end
 
   def fetch_stat_from_redis
     statistics_insert_vals = []
     loop do
       stat_data = $redis.lpop(self.short_url)
-      statistic = JSON.parse(stat_data) if stat_data
-      break if statistic.blank?
+      break if stat_data.blank?
+      statistic = JSON.parse(stat_data)
       client = DeviceDetector.new(statistic.last)
-      statistics_insert_vals << "('#{statistic.first.to_datetime.to_s(:db)}',#{sql_connect.quote(client.device_type)},#{sql_connect.quote(client.os_name)},#{self.id})"
+      statistics_insert_vals << "('#{statistic.first}',#{sql_connect.quote(client.device_type)},#{sql_connect.quote(client.os_name)},#{self.id})"
     end
     sql_transaction_for_array(statistics_insert_vals)
   end
@@ -35,7 +30,7 @@ class Url < ApplicationRecord
   end
 
   def save_stat_to_redis(user_info)
-    $redis.lpush(self.short_url, [Time.now, user_info].to_json)
+    $redis.lpush(self.short_url, [Time.now.to_datetime.to_s(:db), user_info].to_json)
   end
 
   private
@@ -52,24 +47,13 @@ class Url < ApplicationRecord
   end
 
   def sql_transaction_for_array(array)
-    # sql = ActiveRecord::Base.connection()
     statistics_insert_sql = "INSERT INTO statistics (stat_date,gadget,browser,url_id) VALUES "
-    array.in_groups_of(4, false).each do |group|
+    array.in_groups_of(200, false).each do |group|
       sql_connect.transaction do
         sql_connect.execute statistics_insert_sql + group.join(",") + ";"
       end
     end
   end
-
-  # def hash_for_redis
-  #   {
-  #     long_url: self.long_url,
-  #     created_at: self.created_at,
-  #     life_term: self.life_term,
-  #     delay_time: self.delay_time,
-  #     stat: []
-  #   }
-  # end
 
   def custom_short_url?
     !self.short_url.empty?
